@@ -3,3 +3,4 @@
 input/reddit_config.ini
 /.quarto/
 misc/
+.DS_Store
