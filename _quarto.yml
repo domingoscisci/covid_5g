@@ -1,0 +1,42 @@
+project:
+  type: website
+  output-dir: output
+  render:
+    - covid_5g.qmd
+
+bibliography: references.bib
+  
+format:
+  html:
+    page-layout: full
+    include-in-header:
+      text: |
+        <style>
+          img {
+            max-width: 100%;
+            height: auto;
+          }
+
+          .dataframe {
+            font-size: x-small;
+          }
+        </style>
+  typst: 
+    toc: true
+  revealjs: 
+    output-file: presentation.html
+    theme: dark
+    transition: slide
+    transition-speed: fast
+    max-scale: 1.0
+    min-scale: 0.7
+    margin: 0.45
+    include-in-header:
+      text: |
+        <style>
+          .dataframe {
+            font-size: 0.3em !important;
+          }
+        </style>
+  ipynb: default
+

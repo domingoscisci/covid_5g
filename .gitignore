@@ -1,0 +1,5 @@
+.venv/
+.quarto/
+input/reddit_config.ini
+/.quarto/
+misc/
