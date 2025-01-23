@@ -7,6 +7,10 @@ date: "2025-01-23"
 
 ::: {.content-visible when-format="ipynb"}
 
+<a target="_blank" href="https://colab.research.google.com/github/domingoscisci/covid_5g/blob/main/output/covid_5g.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
 ```{python}
 !pip install praw
 

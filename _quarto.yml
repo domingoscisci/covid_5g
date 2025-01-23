@@ -4,10 +4,15 @@ project:
   render:
     - covid_5g.qmd
 
+website:
+  repo-url: https://github.com/domingoscisci/covid_5g
+  repo-actions: [source, issue]
+
 bibliography: references.bib
-  
+
 format:
   html:
+    toc: true
     page-layout: full
     include-in-header:
       text: |

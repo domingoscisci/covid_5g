@@ -1,4 +1,4 @@
-# Covid-19 and 5G:Conspiracy theories during and after the pandemic
+# Covid-19 and 5G: Conspiracy theories during and after the pandemic
 
 *Authors:* Francesco Iarlori, Armando Leotta, Adriano Oliveto, Domingo Scisci
 
