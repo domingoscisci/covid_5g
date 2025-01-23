@@ -208,6 +208,9 @@ comments = scrape_threads(thread_urls)
 
 # Create a Pandas DataFrame
 comments_df = pd.DataFrame(comments)
+
+# Remove empty comments
+comments_df = comments_df.dropna(subset=['text'])
 ```
 
 ```{python}

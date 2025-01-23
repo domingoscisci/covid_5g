@@ -240,7 +240,7 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="data-scraping">Data Scraping</h3>
 <p>We focused our attention on the <a href="https://www.reddit.com/r/conspiracy/">r/conspiracy</a> subreddit, which is a subreddit dedicated to the study of conspiracies and secret societies. We use the <code>PRAW</code> library for the data scraping using the Reddit’s API. We build the <code>get_thread_list()</code> function to retrieve a list of threads from the subreddit, and then the <code>get_thread_comments()</code> function to retrieve the comments for each thread.</p>
 <p>To use the <code>PRAW</code> library and connect to Reddit’s API, we create a token using a personal account, as described in <a href="https://support.reddithelp.com/hc/en-us/articles/16160319875092-Reddit-Data-API-Wiki">Reddit’s guide</a>.</p>
-<div id="27a1a281" class="cell" data-execution_count="2">
+<div id="2ff8891d" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>config_filename <span class="op">=</span> <span class="st">'input/reddit_config.ini'</span> <span class="co"># change this to point to your config file</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> configparser.ConfigParser()</span>
@@ -253,7 +253,7 @@ div.csl-indent {
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    check_for_async<span class="op">=</span><span class="va">False</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7c81e432" class="cell" data-execution_count="3">
+<div id="aacdc27a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_thread_list(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    reddit: praw.Reddit, subreddit: <span class="bu">str</span>, keywords: <span class="bu">str</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> pd.DataFrame:</span>
@@ -345,7 +345,7 @@ div.csl-indent {
 <span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> all_comments</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We use <code>get_thread_list()</code> and <code>scrape_threads()</code> to get all threads list and download all comments from each thread respectively.</p>
-<div id="a6cf9c9d" class="cell" data-execution_count="4">
+<div id="bab26559" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of threads</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> get_thread_list(reddit, <span class="st">'conspiracy'</span>, <span class="st">'covid 5g'</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -357,7 +357,10 @@ div.csl-indent {
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>comments <span class="op">=</span> scrape_threads(thread_urls)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Pandas DataFrame</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>comments_df <span class="op">=</span> pd.DataFrame(comments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>comments_df <span class="op">=</span> pd.DataFrame(comments)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove empty comments</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>comments_df <span class="op">=</span> comments_df.dropna(subset<span class="op">=</span>[<span class="st">'text'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>At the end of the process we have a dataset with <strong>14165</strong> comments from <strong>208</strong> threads. The structure of the DataFrame is shown below (<a href="#tbl-df_structure" class="quarto-xref">Table&nbsp;1</a> and <a href="#tbl-df_excerpt" class="quarto-xref">Table&nbsp;2</a>).</p>
 <div class="cell" data-execution_count="6">
@@ -559,7 +562,7 @@ Figure&nbsp;3: Average comment lengths per month
 <section id="sentiment-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="sentiment-analysis">Sentiment Analysis</h3>
 <p>Before proceding with the sentiment analysis, we first need to clean the text, removing HTML tags, emojis, links, new lines, etc.</p>
-<div id="ec6752c0" class="cell" data-execution_count="16">
+<div id="5c177e6d" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nlp_en <span class="op">=</span> spacy.load(<span class="st">"en_core_web_sm"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_text_en(text, include_stopwords<span class="op">=</span><span class="va">False</span>):</span>
@@ -616,7 +619,7 @@ Figure&nbsp;3: Average comment lengths per month
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>comments_df[<span class="st">'clean_text'</span>] <span class="op">=</span> comments_df[<span class="st">'text'</span>].progress_apply(clean_text_en)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To perform the sentiment analysis we use the the <a href="https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest">Twitter-roBERTa-base for Sentiment Analysis</a>, trained by Cardiff NLP group at Cardiff University. The model was trained on ~124M tweets from January 2018 to December 2021, and finetuned for sentiment analysis with the TweetEval benchmark.</p>
-<div id="9381b37b" class="cell" data-execution_count="18">
+<div id="a50af469" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tokenizer_kwargs <span class="op">=</span> {<span class="st">'padding'</span>:<span class="va">True</span>,<span class="st">'truncation'</span>:<span class="va">True</span>,<span class="st">'max_length'</span>:<span class="dv">512</span>}</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sentiment <span class="op">=</span> pipeline(<span class="st">"text-classification"</span>, model<span class="op">=</span><span class="st">"cardiffnlp/twitter-roberta-base-sentiment-latest"</span>, <span class="op">**</span>tokenizer_kwargs)</span>
@@ -702,7 +705,7 @@ Figure&nbsp;7: Wordclouds by sentiment
 <section id="emotion-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="emotion-analysis">Emotion Analysis</h3>
 <p>For emotion analysis we use the <a href="https://huggingface.co/SamLowe/roberta-base-go_emotions">SamLowe/roberta-base-go_emotions</a> model. The model was trained from <a href="https://huggingface.co/roberta-base">roberta-base</a> on the <a href="https://huggingface.co/datasets/go_emotions">go_emotions dataset</a> for multi-label classification.</p>
-<div id="16558fb9" class="cell" data-execution_count="28">
+<div id="09f6b47a" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tokenizer_kwargs <span class="op">=</span> {<span class="st">'padding'</span>:<span class="va">True</span>,<span class="st">'truncation'</span>:<span class="va">True</span>,<span class="st">'max_length'</span>:<span class="dv">512</span>}</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>emotion <span class="op">=</span> pipeline(<span class="st">"text-classification"</span>, model<span class="op">=</span><span class="st">"SamLowe/roberta-base-go_emotions"</span>, <span class="op">**</span>tokenizer_kwargs)</span>
